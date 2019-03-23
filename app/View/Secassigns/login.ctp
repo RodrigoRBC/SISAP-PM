@@ -5,7 +5,7 @@
       <?php echo $this->Form->create('Secperson', array('url' => array('controller' => 'Secassigns', 'action' =>'asignacion'),'id' => 'SecpersonLoginForm' ,'class'=>'login-form')); ?>
         <div class="row">
           <div class="input-field col s12 center">
-            <?php echo $this->Html->image('LOGO_OBAS_SOLO.png',array('class'=>'circle responsive-img valign profile-image-login')); ?>
+            <?php echo $this->Html->image('LOGO_PAM_SOLO.png',array('class'=>'circle responsive-img valign profile-image-login')); ?>
             <p class="center login-form-text">Sistema De Arbitrios Publicos</p>
           </div>
         </div>

@@ -37,7 +37,7 @@ echo $this->Html->script('jquery.min.js');?>
 		<?php echo $this->Form->hidden('Secperson.password'); ?>
         <div class="row">
           <div class="input-field col s12 center">
-            <?php echo $this->Html->image('LOGO_OBAS.png',array('class'=>'circle responsive-img valign profile-image-login')); ?>
+            <?php echo $this->Html->image('LOGO_PAM.png',array('class'=>'circle responsive-img valign profile-image-login')); ?>
             <p class="center login-form-text">Asignación</p>
           </div>
         </div>

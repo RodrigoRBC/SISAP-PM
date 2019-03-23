@@ -53,7 +53,7 @@
             <nav class="navbar-color">
                 <div class="nav-wrapper light-blue darken">
                     <ul class="left">                      
-                      <li><h1 class="logo-wrapper"><?php echo $this->Html->link($this->Html->image('logo-calidad.png',array('alt'=>'materialize logo')), '/pages/home', array('class' => 'brand-logo darken-1','escape'=>false)); ?>
+                      <li><h1 class="logo-wrapper"><?php echo $this->Html->link($this->Html->image('LOGO_PAM_HO_P.png',array('alt'=>'materialize logo')), '/pages/home', array('class' => 'brand-logo darken-1','escape'=>false)); ?>
             			     <span class="logo-text"></span></h1></li>
                     </ul>
                     <div class="header-search-wrapper hide-on-med-and-down">
@@ -135,8 +135,8 @@
         </div>
         <div class="footer-copyright">
             <div class="container">
-                Copyright © 2017 <a class="grey-text text-lighten-4" href="http://themeforest.net/user/geekslabs/portfolio?ref=geekslabs" target="_blank">DCA UNHEVAL</a> All rights reserved.
-                <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="http://www.facebook.com/miguel.chiu.veramendi">Miguel Chiuyari</a></span>
+                Copyright © 2019 <a class="grey-text text-lighten-4" href="http://themeforest.net/user/geekslabs/portfolio?ref=geekslabs" target="_blank">Municipalidad de Pampamarca</a> All rights reserved.
+                <span class="right"> Design and Developed by <a class="grey-text text-lighten-4" href="http://www.facebook.com/miguel.chiu.veramendi">GoPixelABC</a></span>
             </div>
         </div>
     </footer>
