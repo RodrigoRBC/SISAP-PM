@@ -2,14 +2,14 @@
 <?php
 echo $this->Html->script('jquery.min.js');?>
   <script type="text/javascript">
-  var secassigns=<?php echo json_encode($secassigns);?>; 
+  var secassigns=<?php echo json_encode($secassigns);?>;
   $(document).ready(function() {
     var value = $("#SecorganizationId").val();
     for (var i = 0; i < secassigns.length; i++) {
       if(value == secassigns[i]['Secproject']['secorganization_id']){
-        $('#SecassignSecprojectId').append($('<option>', {value:secassigns[i]['Secproject']['id'], text:secassigns[i]['Secproject']['name']})); 
-        $('#SecassignSecroleId').append($('<option>', {value:secassigns[i]['Secrole']['id'], text:secassigns[i]['Secrole']['name']}));                
-      } 
+        $('#SecassignSecprojectId').append($('<option>', {value:secassigns[i]['Secproject']['id'], text:secassigns[i]['Secproject']['name']}));
+        $('#SecassignSecroleId').append($('<option>', {value:secassigns[i]['Secrole']['id'], text:secassigns[i]['Secrole']['name']}));
+      }
     }
     $('#SecorganizationId').change(function(){
       var valor = $("#SecorganizationId option:selected").text();
@@ -17,15 +17,15 @@ echo $this->Html->script('jquery.min.js');?>
       $('#SecassignSecprojectId').trigger('contentChanged');
       $('#SecassignSecprojectId').empty().html('');
       $('#SecassignSecroleId').trigger('contentChanged');
-      $('#SecassignSecroleId').empty().html(' ');  
+      $('#SecassignSecroleId').empty().html(' ');
       for (var i = 0; i < secassigns.length; i++) {
         if(value == secassigns[i]['Secproject']['secorganization_id']){
-          $('#SecassignSecprojectId').append($('<option>', {value:secassigns[i]['Secproject']['id'], text:secassigns[i]['Secproject']['name']})); 
-          $('#SecassignSecroleId').append($('<option>', {value:secassigns[i]['Secrole']['id'], text:secassigns[i]['Secrole']['name']}));            
-        }   
+          $('#SecassignSecprojectId').append($('<option>', {value:secassigns[i]['Secproject']['id'], text:secassigns[i]['Secproject']['name']}));
+          $('#SecassignSecroleId').append($('<option>', {value:secassigns[i]['Secrole']['id'], text:secassigns[i]['Secrole']['name']}));
+        }
       }
       $('#SecassignSecprojectId').material_select();
-      $('#SecassignSecroleId').material_select();    
+      $('#SecassignSecroleId').material_select();
     });
   });
   </script>
@@ -45,16 +45,16 @@ echo $this->Html->script('jquery.min.js');?>
           <div class="input-field col s12">
             <i class="mdi-social-person-outline prefix"></i>
   				<?php echo $this->Form->select('Secorganization.id',array($secorganizations),array('class'=>'ui compact selection dropdown','style' => 'width: 300px','label'=>false,'escape'=>false,'empty'=>false));?>
-            <label for="SecorganizationId" class="center-align">Facultad</label>
+            <label for="SecorganizationId" class="center-align">Municipalidad</label>
           </div>
         </div>
         <div class="row margin">
           <div class="input-field col s12">
             <i class="mdi-action-lock-outline prefix"></i>
-	  			<select name="data[Secassign][secproject_id]" id='SecassignSecprojectId' 
+	  			<select name="data[Secassign][secproject_id]" id='SecassignSecprojectId'
 	  				style='width:300px;'>
 	  			</select>
-            <label for="SecassignSecprojectId">Escuela Profesional</label>
+            <label for="SecassignSecprojectId">Centro Poblado</label>
           </div>
         </div>
         <div class="row margin">
