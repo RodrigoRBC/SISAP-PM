@@ -22,6 +22,50 @@ class ArbpeoplepublicsController extends AppController {
  */
 	public function index($paginador=null) {
 
+		$this->Arbpeoplepublic->recursive = 0;
+		$this->set('arbpeoplepublics', $this->Paginator->paginate());
+
+		if(!empty($this->request->params['named']['page'])){
+			$this->Session->write('Arbpeoplepublic.page',$this->request->params['named']['page']);
+			$this->request->params['named']['page'] = $this->Session->read('Arbpeoplepublic.page');
+		}
+		
+		$this->set('paginador',$paginador);
+
+		$elementos = array(
+			'Arbpeoplepublic.firstname'=>__('NOMBRES', true),
+			'Arbpeoplepublic.appaterno'=>__('APELLIDO PATERNO', true),
+			'Arbpeoplepublic.apmaterno'=>__('APELLIDO MATERNO', true)
+		);
+
+		$this->set('elementos',$elementos);
+		if(!empty($this->params['named']['valor']) || !empty($this->params['named']['desactivo']))
+		{
+			$this->request->data['Buscar']['buscador'] = $this->params['named']['buscador'];
+			$this->request->data['Buscar']['valor'] = $this->params['named']['valor'];
+			$this->request->data['Buscar']['desactivo'] = $this->params['named']['desactivo'];
+		}
+		if(empty($this->request->data['Buscar']['buscador']))
+			$this->request->data['Buscar']['valor'] = null;
+
+		$valorDeBusqueda = isset($this->request->data['Buscar']['valor'])?trim($this->request->data['Buscar']['valor']):null;
+		$conditions = !empty($valorDeBusqueda)?
+						array($this->request->data['Buscar']['buscador'].' LIKE'=>'%'.trim($this->request->data['Buscar']['valor']).'%'):
+						array();
+
+		$conditionsActivos = (!empty($this->request->data['Buscar']['desactivo']) == 1) ?
+								array('Arbpeoplepublic.status'=>'DE') :
+								array('Arbpeoplepublic.status'=>'AC');
+
+		$conditions = $conditions + $conditionsActivos;
+
+		$this->paginate = array('limit' => 10,
+								'page' => 1,
+								'order' => array ('Arbpeoplepublic.creationdate' => 'asc'),
+								'conditions' => $conditions,
+								'recursive'=>1
+								);
+
 		$arbpeoplepublics=$this->paginate('Arbpeoplepublic');
 		$this->set(compact('arbpeoplepublics'));
 	}
