@@ -23,8 +23,8 @@ class ArbpeoplepulicArbratesController extends AppController {
  */
 	public function index($paginador=null) {
 		$this->ArbpeoplepulicArbrate->recursive = 0;
+		$arbpeoplepulicArbrates =  $this->Paginator->paginate();
 		$this->set('arbpeoplepulicArbrates', $this->Paginator->paginate());
-
 		if(!empty($this->request->params['named']['page'])){
 			$this->Session->write('Arbpeoplepublic.page',$this->request->params['named']['page']);
 			$this->request->params['named']['page'] = $this->Session->read('Arbpeoplepublic.page');
@@ -159,7 +159,7 @@ class ArbpeoplepulicArbratesController extends AppController {
 		$this->set(compact('arbpeoplepublics'));
 	}
 
-	public function generate_report_cost($id = null) {
+	public function generate_order($id = null) {
 		$this->layout = 'content';
 		if (!$this->ArbpeoplepulicArbrate->exists($id)) {
 			throw new NotFoundException(__('Invalid service'));
