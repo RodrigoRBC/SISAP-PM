@@ -7,7 +7,6 @@
 
 	<div class="col s12 m12 112">
 		<div class="card-panel">
-			<p>Click on this paragraph.</p>
 			<div class="row">
 				<!-- {Start-Form} -->
 				<?php echo $this->Form->create('DNI',array('class'=>'col s12'));?>
@@ -20,7 +19,7 @@
 						<!-- ***init-2***   -->
 						<div class="input-field col s3" >
 							<!-- {Input-Type} -->
-							<?php echo $this->Form->text('dni', array('id'=>'IdDNI',));?>
+							<?php echo $this->Form->text('dni', array());?>
 							<!-- {Input-Label} -->
 								<label for="ArbpeoplepulicArbrateFecha"><?php echo __('N° D.N.I.'); ?></label>
 						</div>
@@ -52,14 +51,17 @@
 						<!-- ***init-1***   -->
 						<div class="input-field col s12" >
 							<!-- {Input-Type} -->
-							<?php echo $this->Form->select('arbpeoplepublic_id',$arbpeoplepublics);?>
+							<?php
+								echo $this->Form->select('arbpeoplepublic_id', array(),array('empty' => 'Seleccione..'),false);
+							?>
+							<!-- {Input-Label} -->
+								<label for="ArbpeoplepulicArbrateArbpeoplepublicId"><?php echo __('Beneficiario').'*'; ?></label>
 							<!-- {Input-Error} -->
 							<?php echo $this->Form->error('arbpeoplepublic_id', array(
 															   	'notEmpty' =>  __('personaNombreNoVacio', true),
 																'maxLength' =>  __('personaNombreLongitud', true),
 																), array('class' => 'input text required error'));?>
 							<!-- {Input-Label} -->
-								<label for="ArbpeoplepulicArbrateArbpeoplepublicId"><?php echo __('Beneficiario').'*'; ?></label>
 						</div>
 						<!-- ***Off-1***   -->
 
@@ -152,129 +154,34 @@
 </div>
 
 -->
-<script type="text/javascript">
-    $('.datepicker').pickadate({
-        selectMonths: false, // Creates a dropdown to control month
-        selectYears: 200, // Creates a dropdown of 15 years to control year,
-        monthsFull: [
-            "<?= __d('materialize', 'January') ?>",
-            "<?= __d('materialize', 'February') ?>",
-            "<?= __d('materialize', 'March') ?>",
-            "<?= __d('materialize', 'April') ?>",
-            "<?= __d('materialize', 'May') ?>",
-            "<?= __d('materialize', 'June') ?>",
-            "<?= __d('materialize', 'July') ?>",
-            "<?= __d('materialize', 'August') ?>",
-            "<?= __d('materialize', 'September') ?>",
-            "<?= __d('materialize', 'October') ?>",
-            "<?= __d('materialize', 'November') ?>",
-            "<?= __d('materialize', 'December') ?>"],
-        monthsShort: [
-            "<?= __d('materialize', 'Jan') ?>",
-            "<?= __d('materialize', 'Fev') ?>",
-            "<?= __d('materialize', 'Mar') ?>",
-            "<?= __d('materialize', 'Apr') ?>",
-            "<?= __d('materialize', 'May') ?>",
-            "<?= __d('materialize', 'Jun') ?>",
-            "<?= __d('materialize', 'Jul') ?>",
-            "<?= __d('materialize', 'Aug') ?>",
-            "<?= __d('materialize', 'Sep') ?>",
-            "<?= __d('materialize', 'Oct') ?>",
-            "<?= __d('materialize', 'Nov') ?>",
-            "<?= __d('materialize', 'Dec') ?>"],
-        weekdaysFull: [
-            "<?= __d('materialize', 'Sunday') ?>",
-            "<?= __d('materialize', 'Monday') ?>",
-            "<?= __d('materialize', 'Tuesday') ?>",
-            "<?= __d('materialize', 'Wednesday') ?>",
-            "<?= __d('materialize', 'Thursday') ?>",
-            "<?= __d('materialize', 'Friday') ?>",
-            "<?= __d('materialize', 'Saturday') ?>"],
-        weekdaysShort: [
-            "<?= __d('materialize', 'Sun') ?>",
-            "<?= __d('materialize', 'Mon') ?>",
-            "<?= __d('materialize', 'Tue') ?>",
-            "<?= __d('materialize', 'Wed') ?>",
-            "<?= __d('materialize', 'Thu') ?>",
-            "<?= __d('materialize', 'Fri') ?>",
-            "<?= __d('materialize', 'Sat') ?>"],
-        weekdaysLetter: [
-            "<?= __d('materialize', 'S') ?>",
-            "<?= __d('materialize', 'M') ?>",
-            "<?= __d('materialize', 'T') ?>",
-            "<?= __d('materialize', 'W') ?>",
-            "<?= __d('materialize', 'T') ?>",
-            "<?= __d('materialize', 'F') ?>",
-            "<?= __d('materialize', 'S') ?>"],
-        today: "<?= __d('materialize', 'Today') ?>",
-        clear: "<?= __d('materialize', 'Clear') ?>",
-        close: 'Ok',
-        closeOnSelect: true, // Close upon selecting a date,
-        format: 'dd/mm/yyyy'
-    });
-
-    $('.timepicker').pickatime({
-        default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-        fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
-        twelvehour: false, // Use AM/PM or 24-hour format
-        donetext: 'OK', // text for done-button
-        cleartext: "<?= __d('materialize', 'Clear') ?>", // text for clear-button
-        canceltext: "<?= __d('materialize', 'Cancel') ?>", // Text for cancel-button
-        format: "HH:ii",
-        autoclose: false, // automatic close timepicker
-        ampmclickable: true, // make AM PM clickable
-        aftershow: function(){} //Function for after opening timepicker
-    });
-
-		// $("#ArbpeoplepulicArbrateArbpeoplepublicId").on(function(e) {
-		//
-		//     e.preventDefault(); // avoid to execute the actual submit of the form.
-		//
-		//     var form = $(this);
-		//     var url = form.attr('action');
-		//
-		//     $.ajax({
-		//            type: "POST",
-		//            url: url,
-		//            data: form.serialize(), // serializes the form's elements.
-		//            success: function(data)
-		//            {
-		//                alert(data); // show response from the php script.
-		//            }
-		//          });
-		//
-		//
-		// });
-		//
-		$.ajax({
-				url : 'json_search',
-				data : $('#IdDNI').serialize(),
-				type : 'post',
-				dataType : 'json',
-				success : function(json) {
-					$('#ArbpeoplepulicArbrateArbpeoplepublicId').val(json);
-				},
-				error : function(jqXHR, status, error) {
-						alert('Disculpe, existió un problema');
-				}
-		});
-
-</script>
 <script type="text/javascript" >
 	$(document).ready(function(){
 		$("#MiBoton").click(function(){
+			$dni = $('#DNIDni').val();
 			$.ajax({
-					url : 'json_search',
-					data : $('#IdDNI').serialize(),
-					type : 'post',
-					dataType : 'json',
-					success : function(json) {
-						$('#ArbpeoplepulicArbrateArbpeoplepublicId').val(json);
-					},
-					error : function(jqXHR, status, error) {
-							alert('Disculpe, existió un problema');
-					}
+				// la URL para la petición
+				url : 'json_search',
+				// la información a enviar
+				data : {'data[DNI][dni]' : $dni },
+				// especifica si será una petición POST o GET
+				type : 'POST',
+				// el tipo de información que se espera de respuesta
+				dataType : 'json',
+				// código a ejecutar si la petición es satisfactoria;
+				success : function(json) {
+					$.each(json.data,function(key, registro) {
+		        $("#ArbpeoplepulicArbrateArbpeoplepublicId").append('<option value='+key+'>'+registro+'</option>');
+		      });
+				},
+				// código a ejecutar si la petición falla
+				error : function(xhr, status) {
+						alert('Disculpe, existió un problema');
+				},
+				// código a ejecutar sin importar si la petición falló o no
+				complete : function(xhr, status) {
+						//alert('Petición realizada');
+				}
 			});
-	  });
+		});
 	});
 </script>

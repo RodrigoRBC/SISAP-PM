@@ -1,1 +1,1 @@
-<?php echo json_encode($arbpeoplepublics); ?>
+<?php echo json_encode($response);?>

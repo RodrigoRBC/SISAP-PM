@@ -168,7 +168,7 @@
 
 		echo $this->Html->script('plugins.min.js');
 		echo $this->Html->script('custom-script.js');
-    echo $this->Html->script('message.js');
+    //echo $this->Html->script('message.js');
 	?>
 	<?php echo $scripts_for_layout; ?>
 	<?php echo $this->Js->writeBuffer(); ?>

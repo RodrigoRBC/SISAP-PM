@@ -30,7 +30,7 @@ class ArbpeoplepulicArbratesController extends AppController {
 			$this->request->params['named']['page'] = $this->Session->read('Arbpeoplepublic.page');
 		}
 		$this->set('paginador',$paginador);
-		$elementos = array('ArbpeoplepulicArbrate.arbpeoplepublic_id'=>__('beneficiario', TRUE),'ArbpeoplepulicArbrate.arbrate_id'=>__('Tasa', TRUE));
+		$elementos = array('ArbpeoplepulicArbrate.arbpeoplepublic_id'=>__('N.° D.N.I.', TRUE),'ArbpeoplepulicArbrate.arbrate_id'=>__('Tasa', TRUE));
 		$this->set('elementos',$elementos);
 		if(!empty($this->params['named']['valor']) || !empty($this->params['named']['desactivo']))
 		{
@@ -84,6 +84,7 @@ class ArbpeoplepulicArbratesController extends AppController {
  * @return void
  */
 	public function add() {
+		debug($this->request->data);
 		if ($this->request->is('post')) {
 			$this->ArbpeoplepulicArbrate->create();
 			if ($this->ArbpeoplepulicArbrate->save($this->request->data)) {
@@ -123,6 +124,7 @@ class ArbpeoplepulicArbratesController extends AppController {
 		}
 		$arbpeoplepublics = $this->ArbpeoplepulicArbrate->Arbpeoplepublic->find('list');
 		$arbrates = $this->ArbpeoplepulicArbrate->Arbrate->find('list');
+		debug($arbrates);
 		$secpeople = $this->ArbpeoplepulicArbrate->Secperson->find('list');
 		$this->set(compact('arbpeoplepublics', 'arbrates', 'secpeople'));
 	}
@@ -149,14 +151,33 @@ class ArbpeoplepulicArbratesController extends AppController {
 	}
 
 	public function json_search() {
-		$arbpeoplepublics = $this->request;
 		if ($this->request->is('ajax')){
-			$arbpeoplepublics = array('1'=>'gh');
-			//$arbpeoplepublics = $this->ArbpeoplepulicArbrate->Arbpeoplepublic->find('list');
-			$this->set(compact('arbpeoplepublics'));
-			$this->render('add', 'ajax');
+			$response = array();
+			$data = array();
+			$arbpeoplepublics = $this->ArbpeoplepulicArbrate->Arbpeoplepublic->find(
+				'all', array(
+					'fields' => array('Arbpeoplepublic.id','Arbpeoplepublic.firstname','Arbpeoplepublic.appaterno','Arbpeoplepublic.apmaterno'),
+					'conditions' => array('Arbpeoplepublic.status' => 'AC','Arbpeoplepublic.dni' => $this->request->data['DNI']['dni']),
+					'recursive' => 0
+				)
+			);
+			foreach ($arbpeoplepublics as $arbpeoplepublic) {
+				$data[$arbpeoplepublic['Arbpeoplepublic']['id']] = $arbpeoplepublic['Arbpeoplepublic']['firstname'].' '.$arbpeoplepublic['Arbpeoplepublic']['appaterno'].' '.$arbpeoplepublic['Arbpeoplepublic']['apmaterno'];
+			}
+			if (empty($arbpeoplepublics)) {
+				$response = array(
+					'message' =>'N.° D.N.I. no existe',
+					'data' => array()
+				);
+			} else {
+				$response = array(
+					'message' =>'Selecione la Tasa',
+					'data' => $data
+				);
+			}
+			$this->set(compact('response'));
+			$this->render('json_search', 'ajax');
 		}
-		$this->set(compact('arbpeoplepublics'));
 	}
 
 	public function generate_order($id = null) {
