@@ -38,7 +38,9 @@
 					$id = $arbpeoplepublic['Arbpeoplepublic']['id'];
 					$name = $arbpeoplepublic['Arbpeoplepublic']['firstname'].' '.$arbpeoplepublic['Arbpeoplepublic']['appaterno'].' '.$arbpeoplepublic['Arbpeoplepublic']['apmaterno'] ;
 					$status = $arbpeoplepublic['Arbpeoplepublic']['status'];
-						echo $this->element('action', array('id'=>$id, 'name'=>$name,'estado'=>$status));					?>
+						echo $this->element('action', array('id'=>$id, 'name'=>$name,'estado'=>$status));
+						echo $this->Html->link('<i class="mdi-action-print" title ="Imprimir Reporte"></i>', array('action' => 'generate_payment_report', $id), array('escape'=>false));
+						?>
 				</td>
 			</tr>
 		<?php endforeach; ?>

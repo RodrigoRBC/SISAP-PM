@@ -14,6 +14,7 @@ class ArbpeoplepublicsController extends AppController {
  * @var array
  */
 	public $components = array('Paginator');
+	public $helpers = array('PDF');
 
 /**
  * index method
@@ -29,7 +30,7 @@ class ArbpeoplepublicsController extends AppController {
 			$this->Session->write('Arbpeoplepublic.page',$this->request->params['named']['page']);
 			$this->request->params['named']['page'] = $this->Session->read('Arbpeoplepublic.page');
 		}
-		
+
 		$this->set('paginador',$paginador);
 
 		$elementos = array(
@@ -149,5 +150,188 @@ class ArbpeoplepublicsController extends AppController {
 			$this->Flash->error(__('The arbpeoplepublic could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
+	}
+
+	public function generate_payment_report($id = null) {
+		$this->layout='pdf';
+		if (!$this->Arbpeoplepublic->exists($id)) {
+			throw new NotFoundException(__('Indentificador Inválido'));
+		} else {
+				$arbpeoplepublics = array();
+				$arbpeoplepulicArbrates = array();
+				$arbrates = array();
+				$report_data = array();
+				$arbpeoplepublic = $this->Arbpeoplepublic->find('first',
+					array(
+						'conditions' => array(
+							'Arbpeoplepublic.'. $this->Arbpeoplepublic->primaryKey => $id),
+						'fields' => array(
+							'Arbpeoplepublic.id',
+							'Arbpeoplepublic.dni',
+							'Arbpeoplepublic.firstname',
+							'Arbpeoplepublic.appaterno',
+							'Arbpeoplepublic.apmaterno',
+							'Arbpeoplepublic.arbubigeo_id',
+							'Arbpeoplepublic.status'
+						),
+						'order' => 'Arbpeoplepublic.id asc',
+						'recursive' => 0
+						));
+				$arbpeoplepublicId = $arbpeoplepublic['Arbpeoplepublic']['id'];
+				$arbpeoplepulicArbrates = $this->Arbpeoplepublic->ArbpeoplepulicArbrate->find('all',
+					array(
+						'conditions' => array(
+							'ArbpeoplepulicArbrate.arbpeoplepublic_id'=> $arbpeoplepublicId),
+						'fields' => array(
+							'ArbpeoplepulicArbrate.id',
+							'ArbpeoplepulicArbrate.arbpeoplepublic_id',
+							'ArbpeoplepulicArbrate.arbrate_id',
+							'ArbpeoplepulicArbrate.fecha',
+							'ArbpeoplepulicArbrate.period',
+							'ArbpeoplepulicArbrate.description',
+							'ArbpeoplepulicArbrate.creationdate',
+							'ArbpeoplepulicArbrate.status',
+							'Arbrate.id',
+							'Arbrate.creationdate'
+						),
+						'order' => 'Arbrate.id asc',
+						'recursive' => 0
+						));
+
+					$arbrates = $this->Arbpeoplepublic->ArbpeoplepulicArbrate->Arbrate->find('all', array(
+							'conditions' => array('Arbrate.status'=> 'AC'),
+							'fields' => array(
+								'Arbrate.id',
+								'Arbrate.creationdate'
+							),
+							'order' => 'Arbrate.id asc',
+							'recursive' => 1
+					));
+
+					$existsdata = 0;
+					foreach ($arbrates as $keyarbrate => $valuearbrate) {
+						foreach ($arbpeoplepulicArbrates as $keyarbpeoplepulicArbrate => $valuearbpeoplepulicArbrate) {
+							if ($valuearbpeoplepulicArbrate['ArbpeoplepulicArbrate']['arbrate_id'] == $valuearbrate['Arbrate']['id']) {
+								$report_data[$keyarbrate] = $valuearbpeoplepulicArbrate;
+								$existsdata = 1;
+							}
+						}
+						if ($existsdata == 1) {
+							$existsdata = 0;
+						}else {
+							$report_data[$keyarbrate] = array(
+								'ArbpeoplepulicArbrate' => array(
+									'id' => '',
+									'arbpeoplepublic_id' => '',
+									'arbrate_id' => '',
+									'fecha' => '',
+									'period' => '',
+									'description' => 'NO PAGO',
+									'creationdate' => '',
+									'status' => ''
+								),
+								'Arbrate' => array(
+									'id' => $valuearbrate['Arbrate']['id'],
+									'creationdate' => $valuearbrate['Arbrate']['creationdate']
+								)
+							);
+						}
+					}
+
+				$this->set(compact('arbpeoplepublic', 'arbpeoplepulicArbrates','arbrates', 'report_data'));
+		}
+
+		// $this->layout = 'content';
+		// if (!$this->Period->exists($id)) {
+		// 	throw new NotFoundException(__('Invalid service'));
+		// }else{
+		// 	$periods = array();
+		// 	$acts = array();
+		// 	$costs = array();
+		// 	$attentions = array();
+		//
+		//
+		//
+		// 	$periods = $this->Period->find('all',
+		// 		array(
+		// 			'conditions' => array(
+		// 				'Period.'. $this->Period->primaryKey => $id),
+		// 			'fields' => array(
+		// 				'Period.id',
+		// 				'Period.start',
+		// 				'Period.end',
+		// 				'Period.time_status',
+		// 				'Period.days',
+		// 			),
+		// 			'order' => 'Period.id asc',
+		// 			'recursive' => 0
+		// 			));
+		// 	$periodId = $periods[0]['Period']['id'];
+		// 	$acts = $this->Period->Act->find('all',
+		// 		array(
+		// 			'conditions' => array(
+		// 				'Act.period_id'=> $periodId),
+		// 			'fields' => array(
+		// 				'Act.id',
+		// 				'Act.period_id',
+		// 				'Act.population_id',
+		// 				'Act.future',
+		// 				'Period.id',
+		// 				'Population.id',
+		// 				'Population.name',
+		// 				'Population.code',
+		// 				'Population.v_c_t'
+		// 			),
+		// 			'order' => 'Act.id asc',
+		// 			'recursive' => 0
+		// 			));
+		//
+		// 	$actsIds = array();
+		// 	foreach ($acts as $key => $value) {
+		// 		$actsIds[$key] = $value['Act']['id'];
+		// 	}
+		//
+		// 	$costs = $this->Period->Act->Service->find('all',
+		// 		array(
+		// 			'joins' => array(
+		// 				array(
+		// 					'alias' => 'CostJoin',
+		// 					'table' => 'costs',
+		// 					'type' => 'INNER',
+		// 					'conditions' => array(
+		// 							'CostJoin.service_id = Service.id')
+		// 							)
+		// 				),
+		// 			'conditions' => array(
+		// 				'Service.act_id'=> array_values($actsIds)),
+		// 			'fields' => array(
+		// 				'Service.id',
+		// 				'Service.act_id',
+		// 				'Service.p_u_p_r',
+		// 				'CostJoin.id',
+		// 				'CostJoin.service_id',
+		// 				'CostJoin.f_c_c_r',
+		// 				'CostJoin.INPDP',
+		// 				'CostJoin.INPAP'),
+		// 			'order' => 'Service.act_id asc',
+		// 			'recursive' => 0
+		// 			));
+		//
+		// 	$serviceIds = array();
+		// 	foreach ($costs as $key => $value) {
+		// 		$serviceIds [$key] = $value['Service']['id'];
+		// 	}
+		//
+		// 	$attentions = $this->Period->Act->Service->Attention->find('all',
+		// 		array(
+		// 			'conditions' => array(
+		// 				'Attention.service_id'=> array_values($serviceIds)),
+		// 			'fields' => array('sum(Attention.p_a) AS p_a_service'),
+		// 			'group' => 'Attention.service_id',
+		// 			'order' => 'Attention.service_id asc',
+		// 			'recursive' => 0
+		// 			));
+		// 	$this->set(compact('periods', 'acts','costs','attentions'));
+		// }
 	}
 }
